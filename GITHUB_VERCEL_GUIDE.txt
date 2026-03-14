@@ -1,0 +1,188 @@
+================================================================
+  MVS AQUA — Deploy to GitHub + Vercel
+  Complete Step-by-Step Guide
+================================================================
+
+WHAT YOU NEED:
+  - A computer with internet
+  - GitHub account (free) — https://github.com
+  - Vercel account (free) — https://vercel.com
+  - Git installed — https://git-scm.com/download/win
+
+================================================================
+  PART 1 — INSTALL GIT (if not installed)
+================================================================
+
+1. Go to: https://git-scm.com/download/win
+2. Download and install (click Next on everything)
+3. Restart your computer after install
+4. Open Command Prompt and type: git --version
+   You should see: git version 2.x.x
+
+
+================================================================
+  PART 2 — CREATE GITHUB ACCOUNT
+================================================================
+
+1. Go to: https://github.com
+2. Click "Sign up"
+3. Enter your email, password, username
+4. Verify your email
+5. Done! You have a GitHub account.
+
+
+================================================================
+  PART 3 — PUSH CODE TO GITHUB
+================================================================
+
+Step 1: Open Command Prompt in your project folder
+  - Open the "mvs_aqua_final" folder
+  - Click the address bar at the top
+  - Type "cmd" and press Enter
+  - A black Command Prompt window opens
+
+Step 2: Set up Git (only once ever):
+  git config --global user.email "youremail@gmail.com"
+  git config --global user.name "Your Name"
+
+Step 3: Initialize Git in your project:
+  git init
+
+Step 4: Add all files:
+  git add .
+
+Step 5: Save (commit) the files:
+  git commit -m "MVS AQUA website - initial upload"
+
+Step 6: Create repo on GitHub:
+  - Go to: https://github.com/new
+  - Repository name: mvs-aqua
+  - Keep it "Public"
+  - Do NOT check "Add README"
+  - Click "Create repository"
+
+Step 7: Connect and push:
+  (GitHub shows you commands on the page, copy them)
+  git branch -M main
+  git remote add origin https://github.com/YOURUSERNAME/mvs-aqua.git
+  git push -u origin main
+
+  (It will ask your GitHub username and password/token)
+  - Username: your GitHub username
+  - Password: use a Personal Access Token (see below)
+
+  HOW TO GET GITHUB TOKEN:
+  - GitHub → Click your profile photo → Settings
+  - Left menu → Developer settings (bottom)
+  - Personal access tokens → Tokens (classic)
+  - Generate new token → Check "repo" checkbox
+  - Copy the token and use as password
+
+Step 8: Check GitHub
+  - Go to: https://github.com/YOURUSERNAME/mvs-aqua
+  - You should see all your files there!
+
+
+================================================================
+  PART 4 — DEPLOY ON VERCEL
+================================================================
+
+Step 1: Create Vercel account
+  - Go to: https://vercel.com
+  - Click "Sign Up"
+  - Choose "Continue with GitHub"
+  - Allow Vercel to access GitHub
+
+Step 2: Import your project
+  - On Vercel dashboard, click "Add New..." → "Project"
+  - You'll see your GitHub repos listed
+  - Click "Import" next to "mvs-aqua"
+
+Step 3: Configure deployment
+  - Framework Preset: leave as "Other"
+  - Root Directory: leave as "./" (default)
+  - Build Command: leave EMPTY (vercel.json handles it)
+  - Output Directory: leave EMPTY
+  - Click "Deploy"
+
+Step 4: Wait for deployment
+  - Vercel builds your site (~2-3 minutes)
+  - You'll see a green checkmark when done
+  - Your site is now LIVE!
+
+Step 5: Get your URL
+  - Vercel gives you a URL like: https://mvs-aqua.vercel.app
+  - Click "Visit" to see your live website!
+
+
+================================================================
+  PART 5 — SET ENVIRONMENT VARIABLES
+================================================================
+
+After deployment, go to:
+  Vercel Dashboard → Your Project → Settings → Environment Variables
+
+Add these one by one:
+
+  Variable Name     | Value
+  ------------------|------------------------------------------
+  SECRET_KEY        | mvs-aqua-super-secret-2025-xyz
+  DEBUG             | False
+  ADMIN_WHATSAPP    | 919490255775
+  ALLOWED_HOSTS     | .vercel.app
+
+Click "Save" after each one.
+
+Then go to: Deployments → Click the 3 dots → Redeploy
+(To apply the new settings)
+
+
+================================================================
+  PART 6 — YOUR LIVE WEBSITE
+================================================================
+
+After deployment:
+
+  STORE:  https://mvs-aqua.vercel.app/
+  ADMIN:  https://mvs-aqua.vercel.app/dashboard/login/
+  LOGIN:  admin / mvsaqua2025
+
+
+================================================================
+  EVERY TIME YOU UPDATE THE WEBSITE
+================================================================
+
+Make your changes in the code, then run:
+
+  git add .
+  git commit -m "describe what you changed"
+  git push
+
+Vercel automatically redeploys in ~1 minute!
+No manual steps needed after the first setup.
+
+
+================================================================
+  COMMON ERRORS & FIXES
+================================================================
+
+ERROR: "git is not recognized"
+  FIX: Install Git from https://git-scm.com and restart PC
+
+ERROR: "fatal: not a git repository"
+  FIX: Make sure you're inside the mvs_aqua_final folder
+       Run: cd mvs_aqua_final  first
+
+ERROR: "rejected - non-fast-forward"
+  FIX: Run: git pull origin main --rebase
+       Then: git push
+
+ERROR: Authentication failed
+  FIX: Use Personal Access Token as password (not your password)
+       See "HOW TO GET GITHUB TOKEN" above
+
+ERROR: Vercel build failed
+  FIX: Check Vercel logs for the error
+       Most common: missing package in requirements.txt
+
+================================================================

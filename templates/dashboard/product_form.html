@@ -1,0 +1,185 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{% if product %}Edit{% else %}Add{% endif %} Product{% endblock %}
+{% block page_title %}{% if product %}✏️ Edit: {{ product.name }}{% else %}➕ Add New Product{% endif %}{% endblock %}
+{% block n_prod %}active{% endblock %}
+{% block content %}
+
+{# ONE single form wrapping everything including sidebar labels #}
+<form method="post" enctype="multipart/form-data" id="mainform">
+{% csrf_token %}
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start;">
+
+  {# ===== LEFT COLUMN ===== #}
+  <div>
+    <div class="fc" style="margin-bottom:18px;">
+      <h6 style="font-weight:900;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--border);">📋 Basic Info</h6>
+      <div style="margin-bottom:14px;">
+        <label class="fl">Product Name *</label>
+        <input type="text" name="name" class="fi" value="{{ product.name|default:'' }}" required placeholder="e.g. Royal Blue Betta Full Moon">
+      </div>
+      <div class="g2">
+        <div>
+          <label class="fl">Category *</label>
+          <select name="category" class="fi" required>
+            <option value="">– Select –</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if product.category_id == cat.id %}selected{% endif %}>{{ cat.emoji }} {{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="fl">Stock</label>
+          <input type="number" name="stock" class="fi" value="{{ product.stock|default:'50' }}" min="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="fc" style="margin-bottom:18px;">
+      <h6 style="font-weight:900;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--border);">💰 Pricing &amp; Weight</h6>
+      <div class="g3">
+        <div>
+          <label class="fl">Original Price (₹) *</label>
+          <input type="number" name="price" class="fi" step="0.01" min="0" value="{{ product.price|default:'' }}" required placeholder="0.00">
+        </div>
+        <div>
+          <label class="fl">Sale Price (₹)</label>
+          <input type="number" name="offer_price" class="fi" step="0.01" min="0" value="{{ product.offer_price|default:'' }}" placeholder="Leave blank if none">
+        </div>
+        <div>
+          <label class="fl">Weight (kg) *</label>
+          <input type="number" name="weight_kg" class="fi" step="0.001" min="0.001" value="{{ product.weight_kg|default:'0.200' }}" required>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:3px;">Shipping = weight × ₹80</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc" style="margin-bottom:18px;">
+      <h6 style="font-weight:900;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--border);">📝 Description</h6>
+      <div style="margin-bottom:13px;">
+        <label class="fl">Product Description</label>
+        <textarea name="description" class="fi" rows="4" placeholder="Describe the fish, origin, temperament...">{{ product.description|default:'' }}</textarea>
+      </div>
+      <div>
+        <label class="fl">Care Tips</label>
+        <textarea name="care_tips" class="fi" rows="3" placeholder="Water temp, pH, tank size, feeding...">{{ product.care_tips|default:'' }}</textarea>
+      </div>
+    </div>
+
+    <div class="fc" style="margin-bottom:18px;">
+      <h6 style="font-weight:900;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--border);">🖼️ Images</h6>
+      {% if product and product.image %}
+      <div style="display:flex;gap:10px;margin-bottom:12px;">
+        <img src="{{ product.image.url }}" style="height:76px;width:76px;object-fit:cover;border-radius:9px;border:2px solid var(--border);">
+        {% if product.image2 %}<img src="{{ product.image2.url }}" style="height:76px;width:76px;object-fit:cover;border-radius:9px;border:2px solid var(--border);">{% endif %}
+      </div>
+      {% endif %}
+      <div class="g2">
+        <div>
+          <label class="fl">Main Image</label>
+          <input type="file" name="image" class="fi" accept="image/*" style="padding:7px;">
+        </div>
+        <div>
+          <label class="fl">Image 2 (optional)</label>
+          <input type="file" name="image2" class="fi" accept="image/*" style="padding:7px;">
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button type="submit" class="btn btn-primary" style="padding:11px 28px;font-size:.92rem;">
+        <i class="fas fa-save"></i> {% if product %}Update{% else %}Add{% endif %} Product
+      </button>
+      <a href="{% url 'dash_products' %}" class="btn btn-outline">Cancel</a>
+    </div>
+  </div>
+
+  {# ===== RIGHT SIDEBAR — part of SAME form ===== #}
+  <div>
+    <div class="fc" style="margin-bottom:14px;">
+      <h6 style="font-weight:900;margin-bottom:14px;">🏷️ Labels &amp; Status</h6>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:2px solid {% if product.is_featured %}var(--brand){% else %}var(--border){% endif %};background:{% if product.is_featured %}var(--brand-light, #E0F7FA){% else %}#fff{% endif %};" id="lbl_feat">
+          <input type="checkbox" name="is_featured" id="chk_feat" {% if product.is_featured %}checked{% endif %}
+            style="width:18px;height:18px;accent-color:var(--brand);"
+            onchange="toggleLbl(this,'lbl_feat')">
+          <div>
+            <div style="font-weight:800;font-size:.88rem;">⭐ Featured</div>
+            <div style="font-size:.72rem;color:var(--muted);">Shown on homepage</div>
+          </div>
+        </label>
+
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:2px solid {% if product.is_new_arrival %}var(--brand){% else %}var(--border){% endif %};background:{% if product.is_new_arrival %}var(--brand-light, #E0F7FA){% else %}#fff{% endif %};" id="lbl_new">
+          <input type="checkbox" name="is_new_arrival" id="chk_new" {% if product.is_new_arrival %}checked{% endif %}
+            style="width:18px;height:18px;accent-color:var(--brand);"
+            onchange="toggleLbl(this,'lbl_new')">
+          <div>
+            <div style="font-weight:800;font-size:.88rem;">🆕 New Arrival</div>
+            <div style="font-size:.72rem;color:var(--muted);">Shows NEW badge on card</div>
+          </div>
+        </label>
+
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:2px solid {% if product.is_bestseller %}var(--brand){% else %}var(--border){% endif %};background:{% if product.is_bestseller %}var(--brand-light, #E0F7FA){% else %}#fff{% endif %};" id="lbl_best">
+          <input type="checkbox" name="is_bestseller" id="chk_best" {% if product.is_bestseller %}checked{% endif %}
+            style="width:18px;height:18px;accent-color:var(--brand);"
+            onchange="toggleLbl(this,'lbl_best')">
+          <div>
+            <div style="font-weight:800;font-size:.88rem;">🔥 Bestseller</div>
+            <div style="font-size:.72rem;color:var(--muted);">Shows Hot badge on card</div>
+          </div>
+        </label>
+
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:2px solid {% if product.is_active or not product %}#06D6A0{% else %}#FF6B6B{% endif %};background:{% if product.is_active or not product %}#E8F5E9{% else %}#FFEBEE{% endif %};" id="lbl_active">
+          <input type="checkbox" name="is_active" id="chk_active" {% if product.is_active or not product %}checked{% endif %}
+            style="width:18px;height:18px;accent-color:#06D6A0;"
+            onchange="toggleActive(this)">
+          <div>
+            <div style="font-weight:800;font-size:.88rem;" id="active_txt">{% if product.is_active or not product %}✅ Active (visible on store){% else %}❌ Hidden (not visible){% endif %}</div>
+            <div style="font-size:.72rem;color:var(--muted);">Toggle to show/hide product</div>
+          </div>
+        </label>
+
+      </div>
+    </div>
+
+    <div class="fc">
+      <h6 style="font-weight:900;margin-bottom:10px;">💡 Tips</h6>
+      <div style="font-size:.77rem;color:var(--muted);line-height:1.9;">
+        <div>• Weight × ₹80 = shipping cost</div>
+        <div>• Set offer price to show discount badge</div>
+        <div>• Featured products shown on homepage</div>
+        <div>• Active = visible to customers</div>
+        <div>• Hidden = only you can see in admin</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</form>
+
+<script>
+function toggleLbl(checkbox, lblId) {
+  var lbl = document.getElementById(lblId);
+  if (checkbox.checked) {
+    lbl.style.borderColor = 'var(--brand)';
+    lbl.style.background = '#E0F7FA';
+  } else {
+    lbl.style.borderColor = 'var(--border)';
+    lbl.style.background = '#fff';
+  }
+}
+function toggleActive(checkbox) {
+  var lbl = document.getElementById('lbl_active');
+  var txt = document.getElementById('active_txt');
+  if (checkbox.checked) {
+    lbl.style.borderColor = '#06D6A0';
+    lbl.style.background = '#E8F5E9';
+    txt.textContent = '✅ Active (visible on store)';
+  } else {
+    lbl.style.borderColor = '#FF6B6B';
+    lbl.style.background = '#FFEBEE';
+    txt.textContent = '❌ Hidden (not visible)';
+  }
+}
+</script>
+{% endblock %}

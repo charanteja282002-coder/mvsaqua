@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Checkout – MVS AQUA{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:32px;padding-bottom:50px;">
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;margin-bottom:22px;">📋 Secure Checkout</h2>
+  <div style="display:grid;grid-template-columns:1fr 370px;gap:22px;align-items:start;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;">
+      <h5 style="font-weight:900;margin-bottom:20px;display:flex;align-items:center;gap:8px;"><span style="width:26px;height:26px;background:var(--brand);color:#fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;">1</span> Delivery Details</h5>
+      <form method="post" id="co">
+        {% csrf_token %}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div style="grid-column:1/-1;"><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">FULL NAME *</label><input type="text" name="full_name" required value="{{ request.POST.full_name|default:'' }}" placeholder="Your full name" style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></div>
+          <div><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">WHATSAPP MOBILE *</label><input type="tel" name="mobile" required value="{{ request.POST.mobile|default:'' }}" placeholder="10-digit number" maxlength="10" style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></div>
+          <div><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">EMAIL (optional)</label><input type="email" name="email" value="{{ request.POST.email|default:'' }}" placeholder="your@email.com" style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></div>
+          <div style="grid-column:1/-1;"><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">FULL ADDRESS *</label><textarea name="address" required rows="3" placeholder="House no., Street, Area, Colony..." style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;resize:vertical;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">{{ request.POST.address|default:'' }}</textarea></div>
+          <div><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">LANDMARK</label><input type="text" name="landmark" value="{{ request.POST.landmark|default:'' }}" placeholder="Near school, temple..." style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></div>
+          <div><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">CITY *</label><input type="text" name="city" required value="{{ request.POST.city|default:'' }}" style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></div>
+          <div><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">STATE *</label>
+            <select name="state" required style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;background:#fff;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+              <option value="">– Select –</option>
+              <option value="Tamil Nadu" {% if request.POST.state == "Tamil Nadu" %}selected{% endif %}>Tamil Nadu</option>
+              <option value="Andhra Pradesh" {% if request.POST.state == "Andhra Pradesh" %}selected{% endif %}>Andhra Pradesh</option>
+              <option value="Telangana" {% if request.POST.state == "Telangana" %}selected{% endif %}>Telangana</option>
+              <option value="Karnataka" {% if request.POST.state == "Karnataka" %}selected{% endif %}>Karnataka</option>
+              <option value="Kerala" {% if request.POST.state == "Kerala" %}selected{% endif %}>Kerala</option>
+              <option value="Maharashtra" {% if request.POST.state == "Maharashtra" %}selected{% endif %}>Maharashtra</option>
+              <option value="Gujarat" {% if request.POST.state == "Gujarat" %}selected{% endif %}>Gujarat</option>
+              <option value="West Bengal" {% if request.POST.state == "West Bengal" %}selected{% endif %}>West Bengal</option>
+              <option value="Other" {% if request.POST.state == "Other" %}selected{% endif %}>Other</option>
+            </select>
+          </div>
+          <div><label style="font-size:.78rem;font-weight:800;display:block;margin-bottom:5px;color:var(--muted);">PIN CODE *</label><input type="text" name="pincode" required value="{{ request.POST.pincode|default:'' }}" placeholder="600001" maxlength="6" style="width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"></div>
+        </div>
+        <div style="background:#FFF3E0;border-radius:var(--radius);padding:14px;margin-top:18px;border:1px solid #FFE0B2;">
+          <div style="font-weight:800;font-size:.83rem;margin-bottom:5px;"><i class="fab fa-whatsapp" style="color:#25D366;"></i> How this works</div>
+          <div style="font-size:.8rem;color:var(--muted);line-height:1.6;">After confirming, order details open on WhatsApp. Admin confirms &amp; shares UPI/bank payment info. Fish dispatched every Monday. Only prepaid.</div>
+        </div>
+        <div style="background:#FFEBEE;border-radius:var(--radius);padding:12px;margin-top:10px;font-size:.8rem;color:#B71C1C;border:1px solid #FFCDD2;"><strong>⚠️</strong> Only prepaid orders. No COD. Record unboxing video on delivery.</div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-top:18px;font-size:1rem;"><i class="fas fa-check-circle"></i> Confirm Order &amp; Open WhatsApp</button>
+      </form>
+    </div>
+    <div style="position:sticky;top:85px;">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:12px;">
+        <h6 style="font-weight:900;margin-bottom:14px;">🛒 Your Order</h6>
+        {% for item in items %}
+        <div style="display:flex;justify-content:space-between;align-items:start;padding:9px 0;border-bottom:1px solid var(--border);gap:8px;">
+          <div style="flex:1;"><div style="font-weight:700;font-size:.84rem;">{{ item.product.name }}</div><div style="font-size:.73rem;color:var(--muted);">Qty: {{ item.qty }} × ₹{{ item.price|floatformat:0 }} · {{ item.line_weight|floatformat:3 }}kg</div></div>
+          <div style="font-weight:800;font-size:.88rem;">₹{{ item.line_total|floatformat:0 }}</div>
+        </div>
+        {% endfor %}
+        <div style="padding-top:12px;">
+          <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:7px;"><span>Subtotal</span><span>₹{{ subtotal|floatformat:2 }}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:12px;"><span>Shipping (₹80/kg)</span><span>₹{{ shipping|floatformat:2 }}</span></div>
+          <div style="display:flex;justify-content:space-between;font-weight:900;font-size:1.2rem;border-top:2px solid var(--brand-light);padding-top:11px;"><span>Total</span><span style="color:var(--brand-dark);">₹{{ total|floatformat:2 }}</span></div>
+        </div>
+      </div>
+      <div style="background:var(--brand-light);border-radius:var(--radius);padding:13px;font-size:.78rem;color:var(--brand-dark);"><strong>⚠️ Important</strong><br>• Only prepaid orders<br>• No cash on delivery<br>• Record unboxing video</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

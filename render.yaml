@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mvs-aqua
+    env: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate && python seed_data.py
+    startCommand: gunicorn config.wsgi
+    envVars:
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: ADMIN_WHATSAPP
+        value: 919490255775

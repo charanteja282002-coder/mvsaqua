@@ -1,0 +1,31 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Categories{% endblock %}{% block page_title %}🏷️ Categories{% endblock %}{% block n_cat %}active{% endblock %}
+{% block content %}
+<div class="g2" style="align-items:start;">
+  <div class="fc">
+    <h6 style="font-weight:900;margin-bottom:16px;">Add Category</h6>
+    <form method="post">{% csrf_token %}
+      <div style="margin-bottom:12px;"><label class="fl">Name *</label><input type="text" name="name" class="fi" required placeholder="e.g. Aquarium Fishes"></div>
+      <div style="margin-bottom:12px;"><label class="fl">Emoji Icon</label><input type="text" name="emoji" class="fi" value="🐠" maxlength="4"></div>
+      <div style="margin-bottom:16px;"><label class="fl">Sort Order</label><input type="number" name="sort_order" class="fi" value="0" min="0"></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fas fa-plus"></i> Add Category</button>
+    </form>
+  </div>
+  <div class="tc">
+    <div class="th"><h6>All Categories ({{ categories|length }})</h6></div>
+    <table>
+      <thead><tr><th>Emoji</th><th>Name</th><th>Slug</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for cat in categories %}
+      <tr>
+        <td style="font-size:1.4rem;">{{ cat.emoji }}</td>
+        <td><strong>{{ cat.name }}</strong></td>
+        <td style="color:var(--muted);font-size:.78rem;">{{ cat.slug }}</td>
+        <td><a href="{% url 'category' cat.slug %}" target="_blank" class="btn btn-outline btn-sm btn-ico" title="View"><i class="fas fa-eye"></i></a></td>
+      </tr>
+      {% empty %}<tr><td colspan="4" style="text-align:center;padding:40px;color:var(--muted);">No categories yet</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

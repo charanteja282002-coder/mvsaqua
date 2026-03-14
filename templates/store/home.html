@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}MVS AQUA – Buy Aquarium Fish Online | Betta, Molly, Flowerhorn{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container" style="display:flex;align-items:center;width:100%;position:relative;z-index:2;">
+    <div class="hero-content">
+      <div class="hero-tag">🌊 India's Premium Online Fish Store</div>
+      <h1>Buy <em>Beautiful</em><br>Aquarium Fish Online</h1>
+      <p>Premium Betta, Molly, Flowerhorn &amp; 20+ varieties. Top-quality equipment &amp; fish food. Safe live delivery every Monday across TN &amp; AP.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="{% url 'product_list' %}" class="btn btn-white btn-lg"><i class="fas fa-fish"></i> Shop All Fish</a>
+        <a href="https://wa.me/919490255775" target="_blank" class="btn btn-wa btn-lg"><i class="fab fa-whatsapp"></i> WhatsApp Order</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>500+</b><span>Happy Customers</span></div>
+        <div class="hero-stat"><b>25+</b><span>Fish Varieties</span></div>
+        <div class="hero-stat"><b>₹80/kg</b><span>Shipping</span></div>
+        <div class="hero-stat"><b>Monday</b><span>Live Dispatch</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-fish">🐠</div>
+</section>
+
+<div class="container" style="margin-top:-1px;">
+  <div class="trust-strip">
+    <div class="trust-item"><div class="trust-ico" style="background:#E0F7FA;">🚚</div><div><strong>Monday Dispatch</strong><span>ST &amp; Professional Courier</span></div></div>
+    <div class="trust-item"><div class="trust-ico" style="background:#E8F5E9;">🐠</div><div><strong>Live Fish Guarantee</strong><span>Healthy, safe packaging</span></div></div>
+    <div class="trust-item"><div class="trust-ico" style="background:#FFF3E0;">💬</div><div><strong>WhatsApp Support</strong><span>Order &amp; track easily</span></div></div>
+    <div class="trust-item"><div class="trust-ico" style="background:#FCE4EC;">🔒</div><div><strong>Secure Prepaid</strong><span>UPI &amp; bank transfer</span></div></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="sh"><h2><small>Browse by Category</small>Shop by Type</h2><a href="{% url 'product_list' %}" class="btn btn-primary btn-sm">View All <i class="fas fa-arrow-right"></i></a></div>
+    <div class="cat-strip">
+      {% for cat in categories %}
+      <a href="{% url 'category' cat.slug %}" class="cat-card"><span class="ico">{{ cat.emoji }}</span><div class="nm">{{ cat.name }}</div></a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:12px;">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,#FF6B6B,#FF8E53);border-radius:var(--radius-lg);padding:26px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div style="color:#fff;">
+        <div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.85;margin-bottom:8px;">🔥 Limited Time Combo Deals</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;margin-bottom:10px;">Special Betta Fish Offers!</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <span style="background:rgba(0,0,0,.18);padding:5px 12px;border-radius:50px;font-size:.8rem;font-weight:700;">3 Adult Betta = ₹399 🚚 FREE</span>
+          <span style="background:rgba(0,0,0,.18);padding:5px 12px;border-radius:50px;font-size:.8rem;font-weight:700;">5 Betta Males = ₹499 🚚 FREE</span>
+          <span style="background:rgba(0,0,0,.18);padding:5px 12px;border-radius:50px;font-size:.8rem;font-weight:700;">10 Betta Males = ₹999 🚚 FREE</span>
+        </div>
+      </div>
+      <a href="https://wa.me/919490255775?text=Hi%20I%20want%20combo%20offers" target="_blank" class="btn btn-white btn-lg"><i class="fab fa-whatsapp" style="color:#25D366;"></i> Claim Offer</a>
+    </div>
+  </div>
+</section>
+
+{% if featured %}
+<section class="section">
+  <div class="container">
+    <div class="sh"><h2><small>⭐ Best Picks</small>Featured Products</h2><a href="{% url 'product_list' %}" class="btn btn-primary btn-sm">View All <i class="fas fa-arrow-right"></i></a></div>
+    <div class="hscroll-wrap">
+    <div class="hscroll-row">{% for product in featured %}{% include 'partials/pcard.html' %}{% endfor %}</div>
+  </div>
+  </div>
+</section>
+{% endif %}
+
+{% if new_arrivals %}
+<section class="section" style="background:#fff;">
+  <div class="container">
+    <div class="sh"><h2><small>🆕 Just Arrived</small>New Arrivals</h2><a href="{% url 'product_list' %}" class="btn btn-primary btn-sm">See All <i class="fas fa-arrow-right"></i></a></div>
+    <div class="hscroll-wrap">
+    <div class="hscroll-row">{% for product in new_arrivals %}{% include 'partials/pcard.html' %}{% endfor %}</div>
+  </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="sh" style="justify-content:center;"><h2><small>Simple Process</small>How to Order</h2></div>
+    <div class="g4" style="margin-top:8px;">
+      <div style="text-align:center;padding:26px 18px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);">
+        <div style="width:56px;height:56px;background:linear-gradient(135deg,var(--brand),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">🛒</div>
+        <h4 style="font-weight:800;margin-bottom:6px;">Browse &amp; Add</h4><p style="color:var(--muted);font-size:.83rem;">Add fish &amp; products to your cart</p>
+      </div>
+      <div style="text-align:center;padding:26px 18px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);">
+        <div style="width:56px;height:56px;background:linear-gradient(135deg,var(--brand),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">📋</div>
+        <h4 style="font-weight:800;margin-bottom:6px;">Fill Details</h4><p style="color:var(--muted);font-size:.83rem;">Name, mobile &amp; delivery address</p>
+      </div>
+      <div style="text-align:center;padding:26px 18px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);">
+        <div style="width:56px;height:56px;background:linear-gradient(135deg,#25D366,#128C7E);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">💬</div>
+        <h4 style="font-weight:800;margin-bottom:6px;">WhatsApp Confirm</h4><p style="color:var(--muted);font-size:.83rem;">We confirm &amp; share payment info</p>
+      </div>
+      <div style="text-align:center;padding:26px 18px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);">
+        <div style="width:56px;height:56px;background:linear-gradient(135deg,var(--green),#059669);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.4rem;">🚚</div>
+        <h4 style="font-weight:800;margin-bottom:6px;">Get Delivered</h4><p style="color:var(--muted);font-size:.83rem;">Dispatched every Monday via courier</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if bestsellers %}
+<section class="section" style="background:#fff;">
+  <div class="container">
+    <div class="sh"><h2><small>🔥 Most Popular</small>Bestsellers</h2><a href="{% url 'product_list' %}" class="btn btn-primary btn-sm">View All <i class="fas fa-arrow-right"></i></a></div>
+    <div class="hscroll-wrap">
+    <div class="hscroll-row">{% for product in bestsellers %}{% include 'partials/pcard.html' %}{% endfor %}</div>
+  </div>
+  </div>
+</section>
+{% endif %}
+
+{% if reviews %}
+<section class="section">
+  <div class="container">
+    <div class="sh" style="justify-content:center;"><h2><small>💬 Customer Reviews</small>Verified Reviews</h2></div>
+    <div class="rgrid" style="margin-top:8px;overflow-x:auto;">
+      {% for r in reviews %}
+      <div class="rcard">
+        <div class="stars">{% if r.rating >= 1 %}★{% endif %}{% if r.rating >= 2 %}★{% endif %}{% if r.rating >= 3 %}★{% endif %}{% if r.rating >= 4 %}★{% endif %}{% if r.rating >= 5 %}★{% endif %}</div>
+        {% if r.title %}<div class="rtitle">{{ r.title }}</div>{% endif %}
+        <div class="rbody">"{{ r.body }}"</div>
+        <div class="reviewer">
+          <div class="rev-av">{{ r.name|first }}</div>
+          <div><div class="rev-name">{{ r.name }}</div>{% if r.location %}<div class="rev-loc">📍 {{ r.location }}</div>{% endif %}</div>
+          {% if r.verified %}<span class="verified"><i class="fas fa-check-circle"></i> Verified</span>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section style="padding:0 0 50px;">
+  <div class="container">
+    <div class="g3" style="margin-bottom:32px;">
+      <div style="padding:22px;background:#FFF3E0;border-radius:var(--radius-lg);border:1px solid #FFE0B2;"><div style="font-size:1.8rem;margin-bottom:10px;">⚠️</div><h4 style="font-weight:800;color:#E65100;margin-bottom:6px;">No Cash on Delivery</h4><p style="font-size:.83rem;color:var(--muted);">Only prepaid orders via UPI/bank after WhatsApp confirmation.</p></div>
+      <div style="padding:22px;background:#E8F5E9;border-radius:var(--radius-lg);border:1px solid #C8E6C9;"><div style="font-size:1.8rem;margin-bottom:10px;">📅</div><h4 style="font-weight:800;color:#2E7D32;margin-bottom:6px;">Monday Dispatch</h4><p style="font-size:.83rem;color:var(--muted);">All parcels dispatched every Monday. Track &amp; collect from courier office.</p></div>
+      <div style="padding:22px;background:#E3F2FD;border-radius:var(--radius-lg);border:1px solid #BBDEFB;"><div style="font-size:1.8rem;margin-bottom:10px;">🎥</div><h4 style="font-weight:800;color:#1565C0;margin-bottom:6px;">Record Unboxing Video</h4><p style="font-size:.83rem;color:var(--muted);">Mandatory for any damage claims. No video = no replacement.</p></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);border-radius:var(--radius-lg);padding:44px 36px;text-align:center;color:#fff;">
+      <i class="fab fa-instagram" style="font-size:2.8rem;margin-bottom:14px;display:block;"></i>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;margin-bottom:10px;">Follow @Mvs_aqua</h2>
+      <p style="opacity:.9;margin-bottom:22px;">Live fish videos • New arrivals • Combo offers • Customer unboxings</p>
+      <a href="https://instagram.com/Mvs_aqua" target="_blank" class="btn btn-white btn-lg"><i class="fab fa-instagram" style="color:#E1306C;"></i> Follow on Instagram</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Search "{{ q }}" – MVS AQUA{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:32px;padding-bottom:50px;">
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;margin-bottom:6px;">{% if q %}Results for "{{ q }}"{% else %}Search Products{% endif %}</h2>
+  <p style="color:var(--muted);margin-bottom:24px;">{{ results|length }} result{{ results|length|pluralize }} found</p>
+  <form action="{% url 'search' %}" method="get" style="max-width:580px;margin-bottom:30px;">
+    <div class="search-bar" style="display:flex;">
+      <input type="text" name="q" value="{{ q }}" placeholder="Search fish, food, equipment..." style="padding:13px 20px;font-size:1rem;">
+      <button type="submit"><i class="fas fa-search"></i></button>
+    </div>
+  </form>
+  {% if results %}
+  <div class="pgrid">{% for product in results %}{% include 'partials/pcard.html' %}{% endfor %}</div>
+  {% elif q %}
+  <div style="text-align:center;padding:60px 20px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);">
+    <div style="font-size:4rem;opacity:.3;">😔</div>
+    <h3 style="font-weight:800;margin:14px 0 8px;">No results for "{{ q }}"</h3>
+    <p style="color:var(--muted);">Try different keywords or <a href="{% url 'product_list' %}" style="color:var(--brand);">browse all products</a></p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Dashboard{% endblock %}{% block page_title %}📊 Dashboard{% endblock %}{% block n_home %}active{% endblock %}
+{% block content %}
+<div class="g4" style="margin-bottom:22px;">
+  <div class="stat"><div class="stat-ico" style="background:#E3F2FD;">📦</div><div><div class="stat-val" style="color:var(--brand);">{{ total_orders }}</div><div class="stat-lbl">Total Orders</div></div></div>
+  <div class="stat"><div class="stat-ico" style="background:#FFF3E0;">⏳</div><div><div class="stat-val" style="color:#E65100;">{{ pending }}</div><div class="stat-lbl">Pending</div></div></div>
+  <div class="stat"><div class="stat-ico" style="background:#E8F5E9;">✅</div><div><div class="stat-val" style="color:var(--green);">{{ delivered }}</div><div class="stat-lbl">Delivered</div></div></div>
+  <div class="stat"><div class="stat-ico" style="background:#FCE4EC;">💰</div><div><div class="stat-val" style="color:#AD1457;font-size:1.4rem;">₹{{ revenue|floatformat:0 }}</div><div class="stat-lbl">Revenue</div></div></div>
+</div>
+<div class="tc" style="margin-bottom:20px;">
+  <div class="th"><h6>🛍️ Recent Orders</h6><div style="display:flex;gap:8px;"><a href="{% url 'dash_orders' %}" class="btn btn-outline btn-sm">View All</a><a href="{% url 'dash_orders' %}?status=pending" class="btn btn-primary btn-sm"><i class="fas fa-clock"></i> {{ pending }} Pending</a></div></div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+      <tbody>
+      {% for o in recent_orders %}
+      <tr>
+        <td><strong style="color:var(--brand);">{{ o.order_id }}</strong></td>
+        <td style="font-weight:700;">{{ o.full_name }}</td>
+        <td><a href="https://wa.me/91{{ o.mobile }}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i>{{ o.mobile }}</a></td>
+        <td><strong>₹{{ o.total }}</strong></td>
+        <td><span class="sb s-{{ o.status }}">{{ o.get_status_display }}</span></td>
+        <td style="color:var(--muted);font-size:.77rem;">{{ o.created_at|date:"d M, H:i" }}</td>
+        <td><a href="{% url 'dash_order' o.pk %}" class="btn btn-primary btn-sm">Manage</a></td>
+      </tr>
+      {% empty %}<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">No orders yet</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% if low_stock %}
+<div class="tc">
+  <div class="th"><h6>⚠️ Low Stock Alert</h6><a href="{% url 'dash_products' %}" class="btn btn-outline btn-sm">Manage</a></div>
+  <table>
+    <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead>
+    <tbody>{% for p in low_stock %}<tr>
+      <td style="font-weight:700;">{{ p.name }}</td><td style="color:var(--muted);">{{ p.category.name }}</td>
+      <td>₹{{ p.final_price }}</td><td><span style="color:var(--coral);font-weight:800;">{{ p.stock }} left</span></td>
+      <td><a href="{% url 'dash_product_edit' p.pk %}" class="btn btn-outline btn-sm">Edit</a></td>
+    </tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

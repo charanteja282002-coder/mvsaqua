@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Shopping Cart – MVS AQUA{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:32px;padding-bottom:50px;">
+  <h2 style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;margin-bottom:22px;">🛒 Shopping Cart {% if items %}<span style="font-size:1rem;font-weight:600;color:var(--muted);">({{ items|length }} item{{ items|length|pluralize }})</span>{% endif %}</h2>
+  {% if items %}
+  <div style="display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;">
+    <div>
+      {% for item in items %}
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px;display:flex;gap:14px;align-items:center;">
+        <div style="width:88px;height:88px;border-radius:var(--radius);overflow:hidden;background:linear-gradient(135deg,#E0F7FA,#B2EBF2);flex-shrink:0;">
+          {% if item.product.image %}<img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover;">
+          {% else %}<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.2rem;">{{ item.product.category.emoji }}</div>{% endif %}
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:2px;">{{ item.product.category.name }}</div>
+          <a href="{% url 'product_detail' item.product.slug %}" style="font-weight:800;color:var(--text);font-size:.95rem;">{{ item.product.name }}</a>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:2px;">₹{{ item.price }} each &nbsp;·&nbsp; {{ item.product.weight_kg }}kg/pc</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;align-items:center;border:2px solid var(--border);border-radius:50px;overflow:hidden;">
+            <form method="post" action="{% url 'cart_update' item.product.pk %}" style="display:inline;">{% csrf_token %}<input type="hidden" name="qty" value="{{ item.qty|add:-1 }}"><button type="submit" style="background:none;border:none;padding:8px 13px;cursor:pointer;font-weight:800;font-size:1rem;">−</button></form>
+            <span style="font-weight:800;padding:0 5px;min-width:26px;text-align:center;">{{ item.qty }}</span>
+            <form method="post" action="{% url 'cart_update' item.product.pk %}" style="display:inline;">{% csrf_token %}<input type="hidden" name="qty" value="{{ item.qty|add:1 }}"><button type="submit" style="background:none;border:none;padding:8px 13px;cursor:pointer;font-weight:800;font-size:1rem;">+</button></form>
+          </div>
+          <div style="font-weight:900;font-size:1.05rem;color:var(--brand-dark);min-width:68px;text-align:right;">₹{{ item.line_total|floatformat:0 }}</div>
+          <a href="{% url 'cart_remove' item.product.pk %}" style="width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--coral);font-size:.85rem;flex-shrink:0;">✕</a>
+        </div>
+      </div>
+      {% endfor %}
+      <a href="{% url 'product_list' %}" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
+    </div>
+    <div style="position:sticky;top:85px;">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px;margin-bottom:12px;">
+        <h5 style="font-weight:900;font-size:1.05rem;margin-bottom:18px;">Order Summary</h5>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem;"><span>Subtotal ({{ items|length }} items)</span><span style="font-weight:700;">₹{{ subtotal }}</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:.9rem;"><span>Total Weight</span><span>{{ total_weight }} kg</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-size:.9rem;"><span>Shipping (₹80/kg)</span><span style="font-weight:700;">₹{{ shipping }}</span></div>
+        <div style="border-top:2px dashed var(--border);padding-top:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+          <span style="font-weight:900;font-size:1.05rem;">Total</span>
+          <span style="font-weight:900;font-size:1.5rem;color:var(--brand-dark);">₹{{ total }}</span>
+        </div>
+        <a href="{% url 'checkout' %}" class="btn btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:13px;"><i class="fas fa-lock"></i> Proceed to Checkout</a>
+        <div style="text-align:center;margin-top:12px;font-size:.75rem;color:var(--muted);">🔒 Secure order via WhatsApp<br><strong>+91 9490255775</strong></div>
+      </div>
+      <div style="background:linear-gradient(135deg,var(--brand-light),#b2ebf2);border-radius:var(--radius);padding:14px;text-align:center;">
+        <div style="font-size:.8rem;font-weight:700;color:var(--brand-dark);">🚚 FREE shipping on combo orders!</div>
+        <div style="font-size:.74rem;color:var(--muted);margin-top:3px;">3 Bettas=₹399 | 5=₹499 | 10=₹999</div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:80px 20px;background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);">
+    <div style="font-size:5rem;opacity:.2;margin-bottom:18px;">🛒</div>
+    <h3 style="font-weight:900;margin-bottom:10px;">Your cart is empty</h3>
+    <p style="color:var(--muted);margin-bottom:24px;">Discover our amazing aquarium fish and accessories!</p>
+    <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg"><i class="fas fa-fish"></i> Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

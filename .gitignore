@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Environment
+.env
+.env.local
+.venv
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Media uploads (user uploaded images - too large for git)
+media/products/*.jpg
+media/products/*.jpeg
+media/products/*.png
+media/products/*.gif
+media/products/*.webp
+
+# Windows
+*.bat

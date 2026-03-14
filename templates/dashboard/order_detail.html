@@ -1,0 +1,64 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Order {{ order.order_id }}{% endblock %}{% block page_title %}📦 {{ order.order_id }}{% endblock %}{% block n_ord %}active{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 370px;gap:20px;align-items:start;">
+  <div>
+    <div class="fc" style="margin-bottom:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--border);">
+        <h6 style="font-weight:900;">👤 Customer</h6><span class="sb s-{{ order.status }}">{{ order.get_status_display }}</span>
+      </div>
+      <div class="g2" style="font-size:.87rem;gap:11px;">
+        <div><div style="color:var(--muted);font-size:.7rem;margin-bottom:2px;">FULL NAME</div><strong>{{ order.full_name }}</strong></div>
+        <div><div style="color:var(--muted);font-size:.7rem;margin-bottom:2px;">MOBILE</div><a href="https://wa.me/91{{ order.mobile }}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i>{{ order.mobile }}</a></div>
+        <div style="grid-column:1/-1;"><div style="color:var(--muted);font-size:.7rem;margin-bottom:2px;">ADDRESS</div><strong>{{ order.address }}{% if order.landmark %}, {{ order.landmark }}{% endif %}</strong></div>
+        <div><div style="color:var(--muted);font-size:.7rem;margin-bottom:2px;">CITY &amp; STATE</div><strong>{{ order.city }}, {{ order.state }}</strong></div>
+        <div><div style="color:var(--muted);font-size:.7rem;margin-bottom:2px;">PIN</div><strong>{{ order.pincode }}</strong></div>
+        <div><div style="color:var(--muted);font-size:.7rem;margin-bottom:2px;">ORDERED</div><strong>{{ order.created_at|date:"d M Y, H:i" }}</strong></div>
+      </div>
+    </div>
+    <div class="fc" style="margin-bottom:18px;">
+      <h6 style="font-weight:900;margin-bottom:14px;padding-bottom:11px;border-bottom:1px solid var(--border);">🛒 Order Items</h6>
+      {% for item in order.items.all %}<div style="display:flex;justify-content:space-between;align-items:start;padding:9px 0;border-bottom:1px solid var(--border);"><div><div style="font-weight:800;font-size:.88rem;">{{ item.product_name }}</div><div style="font-size:.73rem;color:var(--muted);">{{ item.qty }} × ₹{{ item.price }} · {{ item.weight_kg }}kg each</div></div><strong>₹{{ item.line_total }}</strong></div>{% endfor %}
+      <div style="padding-top:11px;">
+        <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:5px;"><span>Subtotal</span><span>₹{{ order.subtotal }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:9px;"><span>Shipping</span><span>₹{{ order.shipping }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-weight:900;font-size:1.1rem;border-top:2px solid var(--border);padding-top:9px;"><span>Total</span><span style="color:var(--dark);">₹{{ order.total }}</span></div>
+      </div>
+    </div>
+    <div class="fc">
+      <h6 style="font-weight:900;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--border);">⚙️ Update Order</h6>
+      <form method="post">
+        {% csrf_token %}
+        <div class="g2" style="margin-bottom:13px;">
+          <div><label class="fl">Status</label><select name="status" class="fi">{% for val, lbl in STATUS %}<option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ lbl }}</option>{% endfor %}</select></div>
+          <div><label class="fl">Courier</label><select name="courier" class="fi"><option value="">– Not Set –</option>{% for val, lbl in COURIER %}<option value="{{ val }}" {% if order.courier == val %}selected{% endif %}>{{ lbl }}</option>{% endfor %}</select></div>
+          <div><label class="fl">Tracking Number</label><input type="text" name="tracking_no" class="fi" value="{{ order.tracking_no }}" placeholder="Enter tracking ID"></div>
+          <div><label class="fl">Dispatch Date</label><input type="date" name="dispatch_date" class="fi" value="{{ order.dispatch_date|date:'Y-m-d' }}"></div>
+          <div style="grid-column:1/-1;"><label class="fl">Internal Notes</label><textarea name="notes" class="fi" rows="2" placeholder="Internal notes...">{{ order.notes }}</textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+      </form>
+    </div>
+  </div>
+  <div>
+    <div class="fc" style="margin-bottom:14px;">
+      <h6 style="font-weight:900;margin-bottom:4px;"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp Templates</h6>
+      <p style="font-size:.77rem;color:var(--muted);margin-bottom:14px;">Send pre-written messages to customer</p>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <a href="{{ wa_confirm }}" target="_blank" style="display:flex;align-items:center;gap:11px;padding:13px;background:#E8F5E9;border-radius:var(--r);border:1px solid #C8E6C9;text-decoration:none;"><i class="fab fa-whatsapp" style="color:#25D366;font-size:1.35rem;flex-shrink:0;"></i><div><div style="font-weight:800;font-size:.84rem;color:#1B5E20;">Order Confirmation</div><div style="font-size:.71rem;color:#388E3C;">Send when order received</div></div><i class="fas fa-external-link-alt" style="color:#388E3C;font-size:.78rem;margin-left:auto;"></i></a>
+        <a href="{{ wa_dispatch }}" target="_blank" style="display:flex;align-items:center;gap:11px;padding:13px;background:#E3F2FD;border-radius:var(--r);border:1px solid #BBDEFB;text-decoration:none;"><i class="fab fa-whatsapp" style="color:#1565C0;font-size:1.35rem;flex-shrink:0;"></i><div><div style="font-weight:800;font-size:.84rem;color:#0D47A1;">Dispatch Notification</div><div style="font-size:.71rem;color:#1565C0;">Send with tracking ID</div></div><i class="fas fa-external-link-alt" style="color:#1565C0;font-size:.78rem;margin-left:auto;"></i></a>
+        <a href="https://wa.me/91{{ order.mobile }}" target="_blank" style="display:flex;align-items:center;gap:11px;padding:13px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);text-decoration:none;"><i class="fab fa-whatsapp" style="color:#25D366;font-size:1.35rem;flex-shrink:0;"></i><div><div style="font-weight:800;font-size:.84rem;">Open Customer Chat</div><div style="font-size:.71rem;color:var(--muted);">{{ order.full_name }} · {{ order.mobile }}</div></div></a>
+      </div>
+    </div>
+    <div class="fc">
+      <h6 style="font-weight:900;margin-bottom:12px;">📄 Invoice</h6>
+      <a href="{% url 'invoice' order.order_id %}" class="btn btn-outline" style="width:100%;justify-content:center;"><i class="fas fa-file-pdf"></i> Download PDF Invoice</a>
+      {% if order.tracking_no %}
+      <div style="margin-top:14px;padding:13px;background:var(--bg);border-radius:var(--r);">
+        <div style="font-size:.84rem;"><div><span style="color:var(--muted);">Courier:</span> <strong>{{ order.get_courier_display }}</strong></div><div style="margin-top:4px;"><span style="color:var(--muted);">Tracking:</span> <strong>{{ order.tracking_no }}</strong></div>{% if order.tracking_url %}<a href="{{ order.tracking_url }}" target="_blank" class="btn btn-primary btn-sm" style="margin-top:8px;"><i class="fas fa-external-link-alt"></i> Track on Courier</a>{% endif %}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

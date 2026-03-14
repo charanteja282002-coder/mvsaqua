@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MVS AQUA – India's Premium Online Fish Store{% endblock %}</title>
+  <meta name="description" content="Buy Betta, Molly, Flowerhorn & more online. Equipment & fish food. Dispatch every Monday. Tamil Nadu & AP.">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --brand:#0077B6; --brand-dark:#023E8A; --brand-light:#CAF0F8; --accent:#00B4D8;
+      --coral:#FF6B6B; --gold:#FFB703; --green:#06D6A0;
+      --bg:#F0F8FF; --surface:#fff; --border:#DBF0FF; --text:#0D1B2A; --muted:#64748B;
+      --shadow:0 4px 16px rgba(0,119,182,.12); --shadow-lg:0 8px 32px rgba(0,119,182,.18);
+      --radius:12px; --radius-lg:20px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    .top-strip{background:linear-gradient(90deg,var(--brand-dark),var(--brand));color:#fff;font-size:12px;padding:7px 0;text-align:center}
+    .top-strip a{color:#90E0EF;margin:0 8px}
+
+    .site-header{background:#fff;box-shadow:0 2px 20px rgba(0,119,182,.1);position:sticky;top:0;z-index:1000}
+    .header-inner{max-width:1300px;margin:0 auto;padding:12px 20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px}
+    .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--brand-dark);line-height:1}
+    .logo small{font-family:'Nunito',sans-serif;font-size:.6rem;display:block;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+
+    .search-bar{display:flex;background:var(--bg);border:2px solid var(--border);border-radius:50px;overflow:hidden;transition:border-color .2s}
+    .search-bar:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,180,216,.1)}
+    .search-bar input{flex:1;padding:10px 20px;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:.9rem;outline:none}
+    .search-bar button{background:var(--brand);color:#fff;border:none;padding:0 22px;cursor:pointer;font-size:1rem}
+    .search-bar button:hover{background:var(--brand-dark)}
+
+    .header-actions{display:flex;align-items:center;gap:4px}
+    .hbtn{display:flex;flex-direction:column;align-items:center;padding:6px 12px;border-radius:10px;color:var(--text);font-size:.68rem;font-weight:800;gap:2px;cursor:pointer;transition:background .2s;position:relative;text-decoration:none}
+    .hbtn i{font-size:1.25rem;color:var(--brand)}
+    .hbtn:hover{background:var(--bg);color:var(--text)}
+    .cbadge{position:absolute;top:2px;right:4px;background:var(--coral);color:#fff;border-radius:50%;width:17px;height:17px;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center}
+
+    .main-nav{background:var(--brand-dark)}
+    .nav-wrap{max-width:1300px;margin:0 auto;padding:0 20px;display:flex;overflow-x:auto;scrollbar-width:none}
+    .nav-wrap::-webkit-scrollbar{display:none}
+    .nav-link{color:rgba(255,255,255,.8);padding:13px 16px;font-size:.84rem;font-weight:700;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;display:block}
+    .nav-link:hover,.nav-link.active{color:#fff;border-bottom-color:var(--gold);background:rgba(255,255,255,.07)}
+
+    .container{max-width:1300px;margin:0 auto;padding:0 20px}
+    .section{padding:48px 0}
+
+    /* HERO */
+    .hero{background:linear-gradient(135deg,#023E8A 0%,#0077B6 55%,#00B4D8 100%);min-height:460px;display:flex;align-items:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(0,180,216,.25) 0%,transparent 60%)}
+    .hero-content{position:relative;z-index:2;color:#fff;max-width:580px}
+    .hero-tag{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);padding:5px 14px;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+    .hero h1{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1.1;margin-bottom:16px}
+    .hero h1 em{color:var(--gold);font-style:normal}
+    .hero p{font-size:1rem;opacity:.88;margin-bottom:26px;line-height:1.7}
+    .hero-fish{position:absolute;right:40px;bottom:-10px;font-size:13rem;opacity:.15;line-height:1}
+    .hero-stats{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap}
+    .hero-stat b{font-size:1.4rem;font-weight:900;display:block}
+    .hero-stat span{font-size:.7rem;opacity:.7;text-transform:uppercase;letter-spacing:.5px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 26px;border-radius:50px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .25s;border:2px solid transparent;text-decoration:none;white-space:nowrap}
+    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btn-primary:hover{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;transform:translateY(-2px);box-shadow:var(--shadow)}
+    .btn-white{background:#fff;color:var(--brand-dark)}
+    .btn-white:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+    .btn-outline{background:transparent;color:var(--text);border-color:var(--border)}
+    .btn-outline:hover{border-color:var(--brand);color:var(--brand)}
+    .btn-wa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none}
+    .btn-wa:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,211,102,.4);color:#fff}
+    .btn-sm{padding:7px 16px;font-size:.78rem}
+    .btn-lg{padding:14px 32px;font-size:1rem}
+    .btn-icon{width:34px;height:34px;padding:0;border-radius:8px;justify-content:center}
+
+    /* SECTION HEADING */
+    .sh{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:10px}
+    .sh h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900}
+    .sh h2 small{display:block;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+
+    /* CATEGORY STRIP */
+    .cat-strip{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:4px 0 8px}
+    .cat-strip::-webkit-scrollbar{display:none}
+    .cat-card{flex:0 0 120px;background:#fff;border:2px solid var(--border);border-radius:var(--radius-lg);padding:18px 10px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none;color:var(--text)}
+    .cat-card:hover{border-color:var(--accent);box-shadow:var(--shadow);transform:translateY(-3px);color:var(--text)}
+    .cat-card .ico{font-size:2rem;margin-bottom:8px;display:block}
+    .cat-card .nm{font-size:.76rem;font-weight:800;line-height:1.2}
+
+    /* PRODUCT GRID + CARD */
+    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+    .pcard{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .3s;display:flex;flex-direction:column}
+    .pcard:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--accent)}
+    .pcard-img{position:relative;height:210px;overflow:hidden;background:linear-gradient(135deg,#E0F7FA,#B2EBF2)}
+    .pcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+    .pcard:hover .pcard-img img{transform:scale(1.06)}
+    .pcard-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:4.5rem}
+    .badge-wrap{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:4px}
+    .badge{padding:3px 9px;border-radius:50px;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+    .badge-off{background:var(--coral);color:#fff}
+    .badge-new{background:var(--green);color:#fff}
+    .badge-hot{background:var(--gold);color:#000}
+    .pcard-body{padding:14px;flex:1;display:flex;flex-direction:column}
+    .pcard-cat{font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+    .pcard-name{font-weight:800;font-size:.9rem;line-height:1.3;margin-bottom:8px;color:var(--text)}
+    .pcard-price{display:flex;align-items:baseline;gap:7px;margin-bottom:5px}
+    .pnow{font-size:1.15rem;font-weight:900;color:var(--brand-dark)}
+    .pwas{font-size:.78rem;color:var(--muted);text-decoration:line-through}
+    .psave{font-size:.7rem;color:var(--green);font-weight:700}
+    .pcard-meta{font-size:.7rem;color:var(--muted);margin-bottom:12px}
+    .pcard-actions{display:flex;gap:8px;margin-top:auto}
+    .btn-cart{flex:1;background:var(--brand);color:#fff;border:none;border-radius:50px;padding:9px 10px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px}
+    .btn-cart:hover{background:var(--brand-dark)}
+    .btn-pwa{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;border-radius:50px;padding:9px 13px;cursor:pointer;font-size:.95rem;transition:opacity .2s;text-decoration:none;display:inline-flex;align-items:center}
+    .btn-pwa:hover{opacity:.88}
+
+    /* TRUST STRIP */
+    .trust-strip{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);display:flex;flex-wrap:wrap}
+    .trust-item{flex:1;min-width:180px;padding:18px 22px;display:flex;align-items:center;gap:12px;border-right:1px solid var(--border)}
+    .trust-item:last-child{border-right:none}
+    .trust-ico{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+    .trust-item strong{font-size:.85rem;display:block;font-weight:800}
+    .trust-item span{font-size:.72rem;color:var(--muted)}
+
+    /* REVIEWS */
+    .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+    .rcard{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+    .stars{color:var(--gold);font-size:1rem;margin-bottom:7px}
+    .rtitle{font-weight:800;font-size:.88rem;margin-bottom:5px}
+    .rbody{color:var(--muted);font-size:.83rem;line-height:1.6;font-style:italic;margin-bottom:12px}
+    .reviewer{display:flex;align-items:center;gap:9px}
+    .rev-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--accent));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.8rem;flex-shrink:0}
+    .rev-name{font-weight:800;font-size:.83rem}
+    .rev-loc{font-size:.7rem;color:var(--muted)}
+    .verified{font-size:.68rem;color:var(--green);font-weight:700;margin-left:auto}
+
+    /* TOAST */
+    .toast-wrap{position:fixed;top:80px;right:18px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:310px}
+    .toast{background:#fff;border-left:4px solid var(--green);border-radius:var(--radius);padding:12px 16px;box-shadow:var(--shadow-lg);font-size:.83rem;font-weight:700;display:flex;align-items:center;gap:9px;pointer-events:all;animation:slideIn .3s ease;max-width:310px}
+    .toast.error{border-left-color:var(--coral)} .toast.warning{border-left-color:var(--gold)}
+    @keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+    .toast-close{background:none;border:none;cursor:pointer;margin-left:auto;color:var(--muted);font-size:1rem;line-height:1}
+
+    /* WA FLOAT */
+    .wa-float{position:fixed;bottom:24px;right:22px;z-index:9998}
+    .wa-float a{width:56px;height:56px;background:linear-gradient(135deg,#25D366,#128C7E);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.55rem;box-shadow:0 4px 18px rgba(37,211,102,.5);text-decoration:none;animation:wap 2.5s infinite}
+    @keyframes wap{0%,100%{box-shadow:0 4px 18px rgba(37,211,102,.5)}50%{box-shadow:0 4px 0 13px rgba(37,211,102,0)}}
+
+    /* FOOTER */
+    footer{background:var(--brand-dark);color:rgba(255,255,255,.85);padding:50px 0 20px;margin-top:60px}
+    .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:32px}
+    footer h5{color:#90E0EF;font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+    footer a{color:rgba(255,255,255,.65);font-size:.85rem;display:block;margin-bottom:7px;transition:all .2s}
+    footer a:hover{color:#fff;padding-left:4px}
+    .foot-brand{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#fff;margin-bottom:12px}
+    .foot-desc{font-size:.85rem;line-height:1.7;opacity:.7;margin-bottom:18px}
+    .social-row{display:flex;gap:8px}
+    .soc-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem;text-decoration:none;transition:all .2s}
+    .soc-btn:hover{background:rgba(255,255,255,.2);color:#fff;transform:translateY(-2px)}
+    .foot-divider{border:none;border-top:1px solid rgba(255,255,255,.1);margin:28px 0 18px}
+    .foot-copy{text-align:center;opacity:.35;font-size:.75rem}
+    .ship-box{background:rgba(255,255,255,.07);border-radius:10px;padding:14px;font-size:.8rem;line-height:2}
+    .ship-warn{color:var(--coral);font-weight:800;margin-top:10px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1)}
+
+    /* GRID UTILS */
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){.foot-grid{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:768px){
+      .hero h1{font-size:2rem}.hero-fish{display:none}
+      .header-inner{grid-template-columns:auto auto}
+      .search-bar{display:none}
+      .pgrid{grid-template-columns:repeat(2,1fr);gap:12px}
+      .pcard-img{height:170px}.section{padding:32px 0}
+      .g3{grid-template-columns:1fr}.foot-grid{grid-template-columns:1fr}
+      .trust-item{border-right:none;border-bottom:1px solid var(--border)}
+      .trust-item:last-child{border-bottom:none}
+    }
+    @media(max-width:480px){.pgrid{grid-template-columns:repeat(2,1fr);gap:8px}.pcard-body{padding:10px}}
+
+    /* ===== SCROLL TO TOP ===== */
+    .scroll-top-btn {
+      position: fixed; bottom: 90px; right: 22px; z-index: 9997;
+      width: 46px; height: 46px;
+      background: var(--brand); color: #fff; border: none; border-radius: 50%;
+      font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,119,182,.4);
+      opacity: 0; transform: translateY(20px);
+      transition: all .35s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+    }
+    .scroll-top-btn.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .scroll-top-btn:hover { background: var(--brand-dark); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,119,182,.5); }
+
+    /* ===== HORIZONTAL SCROLL ROW ===== */
+    .hscroll-wrap { position: relative; }
+    .hscroll-row {
+      display: flex; gap: 16px; overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--brand) var(--border);
+    }
+    .hscroll-row::-webkit-scrollbar { height: 4px; }
+    .hscroll-row::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
+    .hscroll-row::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 10px; }
+    .hscroll-row .pcard { flex: 0 0 210px; scroll-snap-align: start; }
+    .hscroll-btn {
+      position: absolute; top: 45%; transform: translateY(-50%);
+      z-index: 10; width: 40px; height: 40px;
+      background: #fff; border: 2px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: var(--shadow);
+      transition: all .2s; color: var(--brand-dark); font-size: .9rem;
+    }
+    .hscroll-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand); transform: translateY(-50%) scale(1.1); }
+    .hscroll-btn.prev { left: -18px; }
+    .hscroll-btn.next { right: -18px; }
+
+    /* ===== CUSTOM PAGE SCROLLBAR ===== */
+    @media(min-width:768px) {
+      ::-webkit-scrollbar { width: 7px; }
+      ::-webkit-scrollbar-track { background: #f0f8ff; }
+      ::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 10px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--brand-dark); }
+    }
+    html { scroll-behavior: smooth; }
+
+  </style>
+</head>
+<body>
+
+<div class="top-strip">
+  🚚 Free shipping on combo orders &nbsp;|&nbsp; Dispatch every Monday &nbsp;|&nbsp;
+  <a href="https://wa.me/919490255775">📱 +91 9490255775</a> &nbsp;|&nbsp;
+  <a href="https://instagram.com/Mvs_aqua">📸 @Mvs_aqua</a>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{% url 'home' %}" class="logo">🐠 MVS AQUA<small>Premium Fish Store</small></a>
+    <form class="search-bar" action="{% url 'search' %}" method="get">
+      <input type="text" name="q" placeholder="Search fish, food, equipment..." value="{{ request.GET.q|default:'' }}" autocomplete="off">
+      <button type="submit"><i class="fas fa-search"></i></button>
+    </form>
+    <div class="header-actions">
+      <a href="{% url 'track' %}" class="hbtn"><i class="fas fa-map-marker-alt"></i>Track</a>
+      <a href="{% url 'cart_view' %}" class="hbtn">
+        <i class="fas fa-shopping-cart"></i>Cart
+        {% if cart_count > 0 %}<span class="cbadge">{{ cart_count }}</span>{% endif %}
+      </a>
+      <a href="https://wa.me/919490255775" target="_blank" class="hbtn"><i class="fab fa-whatsapp" style="color:#25D366;"></i>Order</a>
+    </div>
+  </div>
+</header>
+
+<nav class="main-nav">
+  <div class="nav-wrap">
+    <a href="{% url 'home' %}" class="nav-link">🏠 Home</a>
+    <a href="{% url 'product_list' %}" class="nav-link">🐟 All Products</a>
+    <a href="{% url 'category' 'aquarium-fishes' %}" class="nav-link">🐠 Fish</a>
+    <a href="{% url 'category' 'equipment' %}" class="nav-link">⚙️ Equipment</a>
+    <a href="{% url 'category' 'fish-foods' %}" class="nav-link">🌿 Fish Food</a>
+    <a href="{% url 'category' 'live-plants' %}" class="nav-link">🌱 Plants</a>
+    <a href="{% url 'category' 'medicine-care' %}" class="nav-link">💊 Medicine</a>
+    <a href="{% url 'category' 'aquariums-bowls' %}" class="nav-link">🏺 Bowls</a>
+    <a href="{% url 'track' %}" class="nav-link">📦 Track Order</a>
+  </div>
+</nav>
+
+<div class="toast-wrap" id="toastWrap">
+  {% for m in messages %}
+  <div class="toast {% if m.tags == 'error' %}error{% elif m.tags == 'warning' %}warning{% endif %}">
+    {% if m.tags == 'success' %}<i class="fas fa-check-circle" style="color:var(--green);font-size:1.1rem;"></i>
+    {% elif m.tags == 'error' %}<i class="fas fa-times-circle" style="color:var(--coral);font-size:1.1rem;"></i>
+    {% else %}<i class="fas fa-info-circle" style="color:var(--gold);font-size:1.1rem;"></i>{% endif %}
+    {{ m }}
+    <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+  </div>
+  {% endfor %}
+</div>
+
+{% block content %}{% endblock %}
+
+<div class="wa-float">
+  <a href="https://wa.me/919490255775" target="_blank" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">🐠 MVS AQUA</div>
+        <p class="foot-desc">India's trusted online aquarium fish store. Premium quality fish, food & equipment safely delivered.</p>
+        <div class="social-row">
+          <a href="https://wa.me/919490255775" class="soc-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://instagram.com/Mvs_aqua" class="soc-btn" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com/@Mvs_aqua" class="soc-btn" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div>
+        <h5>Shop</h5>
+        <a href="{% url 'category' 'aquarium-fishes' %}">🐠 Aquarium Fishes</a>
+        <a href="{% url 'category' 'equipment' %}">⚙️ Equipment</a>
+        <a href="{% url 'category' 'fish-foods' %}">🌿 Fish Food</a>
+        <a href="{% url 'category' 'live-plants' %}">🌱 Live Plants</a>
+        <a href="{% url 'category' 'medicine-care' %}">💊 Medicine</a>
+        <a href="{% url 'category' 'aquariums-bowls' %}">🏺 Bowls & Tanks</a>
+      </div>
+      <div>
+        <h5>Help</h5>
+        <a href="{% url 'track' %}">📦 Track Order</a>
+        <a href="{% url 'cart_view' %}">🛒 View Cart</a>
+        <a href="https://wa.me/919490255775">💬 WhatsApp Support</a>
+        <a href="{% url 'dash_login' %}">🔐 Admin Login</a>
+      </div>
+      <div>
+        <h5>Shipping Info</h5>
+        <div class="ship-box">
+          <div>🚚 ₹80 per kg</div>
+          <div>📅 Dispatch: Every Monday</div>
+          <div>📦 ST & Professional Courier</div>
+          <div>🌍 Tamil Nadu & Andhra Pradesh</div>
+          <div class="ship-warn">
+            ⚠️ Important:<br>
+            • Only prepaid orders<br>
+            • No cash on delivery<br>
+            • Unboxing video required
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="foot-divider">
+    <p class="foot-copy">© 2025 MVS AQUA — All rights reserved | @Mvs_aqua | +91 9490255775</p>
+  </div>
+</footer>
+
+<script>
+setTimeout(function(){
+  document.querySelectorAll('.toast').forEach(function(t){
+    t.style.animation='slideIn .3s ease reverse';
+    setTimeout(function(){t.remove()},300);
+  });
+},4000);
+
+// AJAX cart
+document.querySelectorAll('.ajax-cart').forEach(function(form){
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    var fd=new FormData(form);
+    var resp=await fetch(form.action,{method:'POST',headers:{'X-Requested-With':'XMLHttpRequest','X-CSRFToken':fd.get('csrfmiddlewaretoken')},body:fd});
+    var data=await resp.json();
+    if(data.ok){
+      document.querySelectorAll('.cbadge').forEach(function(b){b.textContent=data.cart_count;b.style.display='flex'});
+      var t=document.createElement('div');t.className='toast';
+      t.innerHTML='<i class="fas fa-check-circle" style="color:var(--green);font-size:1.1rem;"></i>'+data.name+' added!<button class="toast-close" onclick="this.parentElement.remove()">×</button>';
+      document.getElementById('toastWrap').prepend(t);
+      setTimeout(function(){t.style.animation='slideIn .3s reverse';setTimeout(function(){t.remove()},300)},3000);
+    }
+  });
+});
+</script>
+
+<script>
+// ── SCROLL TO TOP BUTTON ──────────────────────────────
+var topBtn = document.createElement('button');
+topBtn.className = 'scroll-top-btn';
+topBtn.title = 'Back to top';
+topBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+topBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+document.body.appendChild(topBtn);
+window.addEventListener('scroll', function(){
+  topBtn.classList.toggle('show', window.scrollY > 350);
+}, {passive: true});
+
+// ── HORIZONTAL SCROLL ARROWS ─────────────────────────
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.hscroll-wrap').forEach(function(wrap){
+    var row = wrap.querySelector('.hscroll-row');
+    if(!row) return;
+
+    var prev = document.createElement('button');
+    prev.className = 'hscroll-btn prev';
+    prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    prev.addEventListener('click', function(){ row.scrollBy({left: -650, behavior:'smooth'}); });
+
+    var next = document.createElement('button');
+    next.className = 'hscroll-btn next';
+    next.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    next.addEventListener('click', function(){ row.scrollBy({left: 650, behavior:'smooth'}); });
+
+    function upd(){
+      prev.style.display = row.scrollLeft > 5 ? 'flex' : 'none';
+      next.style.display = (row.scrollLeft + row.clientWidth) < (row.scrollWidth - 5) ? 'flex' : 'none';
+    }
+    row.addEventListener('scroll', upd, {passive:true});
+    setTimeout(upd, 100);
+    wrap.appendChild(prev);
+    wrap.appendChild(next);
+  });
+});
+</script>
+
+</body>
+</html>

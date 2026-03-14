@@ -1,0 +1,34 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Orders{% endblock %}{% block page_title %}📦 Orders{% endblock %}{% block n_ord %}active{% endblock %}
+{% block content %}
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+  <a href="{% url 'dash_orders' %}" class="btn {% if not sf %}btn-primary{% else %}btn-outline{% endif %} btn-sm">All</a>
+  <a href="?status=pending"    class="btn {% if sf == 'pending' %}btn-primary{% else %}btn-outline{% endif %} btn-sm">⏳ Pending ({{ counts.pending }})</a>
+  <a href="?status=confirmed"  class="btn {% if sf == 'confirmed' %}btn-primary{% else %}btn-outline{% endif %} btn-sm">✅ Confirmed ({{ counts.confirmed }})</a>
+  <a href="?status=processing" class="btn {% if sf == 'processing' %}btn-primary{% else %}btn-outline{% endif %} btn-sm">⚙️ Processing ({{ counts.processing }})</a>
+  <a href="?status=dispatched" class="btn {% if sf == 'dispatched' %}btn-primary{% else %}btn-outline{% endif %} btn-sm">🚚 Dispatched ({{ counts.dispatched }})</a>
+  <a href="?status=delivered"  class="btn {% if sf == 'delivered' %}btn-primary{% else %}btn-outline{% endif %} btn-sm">🎉 Delivered ({{ counts.delivered }})</a>
+</div>
+<div class="tc">
+  <div class="th"><h6>{% if sf %}{{ sf|title }} Orders{% else %}All Orders{% endif %} <span style="color:var(--muted);font-weight:600;">({{ orders|length }})</span></h6></div>
+  <div style="overflow-x:auto;">
+    <table>
+      <thead><tr><th>Order ID</th><th>Customer</th><th>Mobile</th><th>Location</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>
+      {% for o in orders %}
+      <tr>
+        <td><strong style="color:var(--brand);">{{ o.order_id }}</strong></td>
+        <td style="font-weight:800;">{{ o.full_name }}</td>
+        <td><a href="https://wa.me/91{{ o.mobile }}" target="_blank" class="wa-btn"><i class="fab fa-whatsapp"></i>{{ o.mobile }}</a></td>
+        <td style="color:var(--muted);font-size:.82rem;">{{ o.city }}, {{ o.state }}</td>
+        <td><strong>₹{{ o.total }}</strong><br><span style="font-size:.71rem;color:var(--muted);">Ship: ₹{{ o.shipping }}</span></td>
+        <td><span class="sb s-{{ o.status }}">{{ o.get_status_display }}</span></td>
+        <td style="color:var(--muted);font-size:.77rem;">{{ o.created_at|date:"d M Y" }}<br>{{ o.created_at|date:"H:i" }}</td>
+        <td><div style="display:flex;gap:5px;"><a href="{% url 'dash_order' o.pk %}" class="btn btn-primary btn-sm">Manage</a><a href="{% url 'invoice' o.order_id %}" class="btn btn-outline btn-sm btn-ico" title="PDF"><i class="fas fa-file-pdf"></i></a></div></td>
+      </tr>
+      {% empty %}<tr><td colspan="8" style="text-align:center;padding:50px;color:var(--muted);">{% if sf %}No {{ sf }} orders{% else %}No orders yet{% endif %}</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
